@@ -1,0 +1,26 @@
+<div id="textEditor">
+    <div id="theRibbon">
+        <button title="Bold" (click)="executeCommand('Bold')"><b>B</b></button>
+        <button title="Italic" (click)="executeCommand('Italic')"><i>I</i></button>
+        <button title="Superscript" (click)="executeCommand('Superscript')">X<sup>2</sup></button>
+        <button title="Subscript" (click)="executeCommand('Subscript')">X<sub>2</sub></button>
+        <button title="Strikethrough" (click)="executeCommand('Strikethrough')"><s>abc</s></button>
+        <button title="Orderedlist" (click)="executeCommandWithOption('insertorderedlist',false,'')">(i)</button>
+        <button title="Unorderedlist" (click)="executeCommand('insertunorderedlist')">&bull;</button>
+        <input type="color" title="Font color" (change)="executeCommandWithOption('ForeColor',false,$event.target.value)" />
+        <input type="color" title="Backround color" (change)="executeCommandWithOption('BackColor',false,$event.target.value)" />
+        <select (change)="executeCommandWithOption('FontName',false,$event.target.value)">
+          <option *ngFor="let m of fontList" [value]="m.key" [style.fontFamily]="m.key">{{m.name}}</option>
+        </select>
+        <select (change)="executeCommandWithOption('FontSize',false,$event.target.value)">
+          <option *ngFor="let m of fontSizeList">{{m}}</option>
+        </select>
+        <button title="Create link" (click)="executeCommandWithOption('createlink',false,'')">Link</button>
+        <button title="Remove link" (click)="executeCommand('unlink')">Unlink</button>
+        <button title="Undo" (click)="executeCommand('undo')" style="font-size: 18px;">&#8630;</button>
+        <button title="Redo" (click)="executeCommand('redo')" style="font-size: 18px;">&#8631;</button>
+    </div>
+    <div id="richTextArea">
+        <iframe #iframe id="theWYSIWYG" name="theWYSIWYG" frameborder="0"></iframe>
+    </div>
+</div>

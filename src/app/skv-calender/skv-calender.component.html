@@ -1,0 +1,42 @@
+<div class="input-container">
+
+    <input type="text" [(ngModel)]="selectedDate">
+
+</div>
+
+<div class="cal">
+
+    <div class="cal-header">
+        <button class="btn btn-action btn-link btn-lg" data-calendar-toggle="previous" (click)="renderCal('prev')">
+            <svg height="24" version="1.1" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path>
+            </svg>
+        </button>
+
+        <!-- <div class="cal-header-label" data-calendar-label="month">{{monthNames[month]}} {{year}}</div> -->
+        <div class="cal-header-label" data-calendar-label="month">
+            <select class="select" [(ngModel)]="month" (change)="changeMonthYear()">
+                <option *ngFor="let m of monthNames; let i=index" [value]="i">{{m}}</option>
+            </select> &nbsp;
+            <select class="select" [(ngModel)]="year" (change)="changeMonthYear()">
+            <option *ngFor="let m of yearList">{{m}}</option>
+                </select>
+        </div>
+
+        <button class="btn btn-action btn-link btn-lg" data-calendar-toggle="next" (click)="renderCal('next')"> 
+            <svg height="24" version="1.1" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"></path>
+            </svg>
+        </button>
+    </div>
+    <div class="cal-week">
+        <span *ngFor="let m of daysNameList">{{m}}</span>
+    </div>
+    <div class="cal-body" data-calendar-area="month">
+        <div class="cal-date cal-date--active" *ngFor="let m of dayNumberList" [class.today]="m.isSelected"><span></span>
+            <button *ngIf="m.display!=''">{{m.display}}</button>
+
+        </div>
+        <!-- cal-date--today -->
+    </div>
+</div>
