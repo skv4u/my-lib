@@ -7,13 +7,13 @@ div#textEditor {
 div#theRibbon {
     border-bottom: none;
     padding: 10px;
-    background-color: rgb(40, 110, 89);
+    background-color: #fd903f;
     color: white;
     border-radius: 8px 8px 0px 0px;
 }
 
 div#richTextArea {
-    border: 2px solid rgb(40, 110, 89);
+    border: 2px solid #fd903f;
     height: 100%;
     width: 100%px;
 }
@@ -42,6 +42,16 @@ input[type=color] {
     background: transparent;
     width: 24px;
     height: 24px;
+}
+
+input[type=file] {
+    height: 12px;
+    width: 12px;
+    border: 1px solid;
+    position: absolute;
+    margin-top: -18px;
+    margin-left: -6px;
+    opacity: 0;
 }
 
 select {

@@ -1,29 +1,33 @@
-import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit,ViewChild, ElementRef,Input,forwardRef,EventEmitter,Output } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
+
 
 @Component({
   selector: 'skv-editor',
   templateUrl: './skv-editor.component.html',
-  styleUrls: ['./skv-editor.component.css']
+  styleUrls: ['./skv-editor.component.css'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => SkvEditorComponent),
+      multi: true
+    }
+  ]
 })
-export class SkvEditorComponent implements OnInit {
+export class SkvEditorComponent implements ControlValueAccessor {
+  @Input('data') data:string;
   @ViewChild('iframe') iframe: ElementRef;
-  iframeDocRef:any;
+  @Output() update = new EventEmitter;
+  // value:string = ''
+  private _onChange = (_: any) => {};
+  private _onTouched = () => {};
+   iframeDocRef:any;
   fontList:any[]=[];
   fontSizeList:string[]=[];
-  constructor() { }
-  ngAfterViewInit() {
-    let content:string = `<div>Proin efficitur tellus blandit, dictum ante ut, posuere ligula. Duis suscipit ante efficitur risus tincidunt cursus.</div> 
-    <div><br></div><div>Aliquam in dui vel erat euismod volutpat. Morbi pulvinar, tortor at aliquam viverra, odio neque molestie urna, sed tempus nibh ligula vel ligula. Sed aliquet mi a tortor rutrum fermentum. Suspendisse ut velit diam. Maecenas ligula enim, rhoncus mattis lorem ut, tincidunt varius tortor.&nbsp;</div><div><br></div><div>Cras ex nunc, vestibulum ut augue et, tincidunt fringilla dolor. Nam laoreet turpis in arcu commodo ultrices. Cras eget sapien ac velit accumsan tempor ut maximus mauris. Nunc sem odio, pellentesque sit amet magna sed, gravida consectetur massa. Etiam sodales convallis purus eget condimentum. Mauris ultricies purus vel ultricies tempus.</div>`;
-    // doc.open();
-    // doc.write(content);
-    // doc.close();
-    this.iframeDocRef =  this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow;
-    this.iframeDocRef.designMode = "on";
-    this.iframeDocRef.open();
-    this.iframeDocRef.write(content);
-    this.iframeDocRef.close();
-  }
-  ngOnInit() {   
+  isViewMode:boolean = false;
+  isSourceVisible:boolean = false;
+  constructor() {
     this.fontList = [
       {"key":"Times New Roman","name":"Times New Roman"},
       {"key":"consolas","name":"Consolas"},
@@ -36,7 +40,26 @@ export class SkvEditorComponent implements OnInit {
     for(let i=1; i<=7; i++){
       this.fontSizeList.push(i + "");
     }
+   }
+  ngAfterViewInit() {
+    // let content:string = ``;
+    // doc.open();
+    // doc.write(content);
+    // doc.close();
+    // console.log(this.data)
+    this.iframeDocRef =  this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow;
+    this.iframeDocRef.designMode = "on";
+    this.iframeDocRef.open();
+    this.iframeDocRef.write(this.data);
+    this.iframeDocRef.close();
+
+    this.iframeDocRef.body.addEventListener('keyup',(e)=>{
+      this.newEmit(e.target.innerHTML);
+      // this._onChange(this.iframeDocRef.body.textContent);
+      // this._onTouched(this.iframeDocRef.body.textContent);
+    },true)
   }
+ 
 
   executeCommand(cmd:any){
     this.iframeDocRef.execCommand(cmd,false,null);
@@ -45,9 +68,65 @@ export class SkvEditorComponent implements OnInit {
     let newCmd:any = cmd3;
     switch(cmd1){
       case 'insertorderedlist': newCmd = 'newOL' + Math.round(Math.random()*1000); break;
-      case 'createlink': newCmd = "https://google.come"; break;
+      case 'createlink': newCmd = prompt("Enter URL "); break;
     }
     this.iframeDocRef.execCommand(cmd1,cmd2,newCmd);
     
   }
+  viewEditMode(){
+    console.log(this.isViewMode);
+    if(this.isViewMode){
+    this.iframeDocRef.designMode = "on";
+    this.isViewMode = false;
+    
+    }
+    else{
+      this.iframeDocRef.designMode = "off";
+    this.isViewMode = true;
+    
+    }
+  }
+  sourceCode(){    
+    if(this.isSourceVisible){
+      this.iframeDocRef.body.innerHTML = this.iframeDocRef.body.textContent;      
+      this.isSourceVisible = false;
+    }else{
+      this.iframeDocRef.body.textContent= this.iframeDocRef.body.innerHTML;      
+      this.isSourceVisible = true;      
+    }
+    
+  }
+  insertImage(elem:any){
+    if (elem.files && elem.files[0]) {
+      var reader = new FileReader();
+      reader.onload =  (e:any) => {
+       console.log(e.target.result);
+       this.iframeDocRef.execCommand('insertImage',false,e.target.result);
+      };
+      reader.readAsDataURL(elem.files[0]);
+    }
+  }
+  newEmit(content:any){
+    this.writeValue(content);
+    this.registerOnChange(content);
+    this.update.emit(content);
+    
+  }
+  writeValue(obj: any): void {
+    this.data = obj;
+    // throw new Error("Method not implemented.");
+  }
+
+
+  setDisabledState?(isDisabled: boolean): void {
+    // throw new Error("Method not implemented.");
+  }
+ 
+  registerOnChange( fn : any ) : void {
+    this._onChange = fn;
+  }
+
+  registerOnTouched( fn : any ) : void {
+    this._onTouched = fn;
+  } 
 }

@@ -1,4 +1,9 @@
 <!-- <skv-calender></skv-calender> -->
+{{result}}
 <div style="width:70%; margin: 0 auto">
-    <skv-editor></skv-editor>
+
+    <form #form="ngForm">
+        <!-- <json-input [(ngModel)]="result" name="result"></json-input> -->
+        <skv-editor [data]="result" (update)="newData($event)"></skv-editor>
+    </form>
 </div>

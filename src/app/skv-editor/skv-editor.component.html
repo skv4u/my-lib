@@ -2,9 +2,10 @@
     <div id="theRibbon">
         <button title="Bold" (click)="executeCommand('Bold')"><b>B</b></button>
         <button title="Italic" (click)="executeCommand('Italic')"><i>I</i></button>
+        <button title="Underline" (click)="executeCommand('Underline')"><u>U</u></button>
         <button title="Superscript" (click)="executeCommand('Superscript')">X<sup>2</sup></button>
         <button title="Subscript" (click)="executeCommand('Subscript')">X<sub>2</sub></button>
-        <button title="Strikethrough" (click)="executeCommand('Strikethrough')"><s>abc</s></button>
+        <button title="Strikethrough" (click)="executeCommand('Strikethrough')"><s>S</s></button>
         <button title="Orderedlist" (click)="executeCommandWithOption('insertorderedlist',false,'')">(i)</button>
         <button title="Unorderedlist" (click)="executeCommand('insertunorderedlist')">&bull;</button>
         <input type="color" title="Font color" (change)="executeCommandWithOption('ForeColor',false,$event.target.value)" />
@@ -19,6 +20,11 @@
         <button title="Remove link" (click)="executeCommand('unlink')">Unlink</button>
         <button title="Undo" (click)="executeCommand('undo')" style="font-size: 18px;">&#8630;</button>
         <button title="Redo" (click)="executeCommand('redo')" style="font-size: 18px;">&#8631;</button>
+        <!-- <button title="View/Edit mode" (click)="viewEditMode()" style="font-size: 18px;">&#8633;</button> -->
+        <button title="Source Code" (click)="sourceCode()" style="font-size: 18px;"><!--&#8416; --> {{'{ }'}}</button>
+        <button title="Insert Image" style="font-size: 18px;">&#9775;
+            <input type="file" (change)="insertImage($event.target)" accept="image/*">
+        </button>
     </div>
     <div id="richTextArea">
         <iframe #iframe id="theWYSIWYG" name="theWYSIWYG" frameborder="0"></iframe>
