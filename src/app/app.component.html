@@ -1,9 +1,11 @@
 <!-- <skv-calender></skv-calender> -->
-{{result}}
 <div style="width:70%; margin: 0 auto">
 
     <form #form="ngForm">
         <!-- <json-input [(ngModel)]="result" name="result"></json-input> -->
-        <skv-editor [data]="result" (update)="newData($event)"></skv-editor>
+        <skv-editor [data]="result" [options]="options" (onUpdate)="update($event)"></skv-editor>
     </form>
+
 </div>
+<div *ngIf="view">{{this.result}}</div>
+<button (click)="view=true">Enabled</button>

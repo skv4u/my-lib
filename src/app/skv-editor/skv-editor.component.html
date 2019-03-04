@@ -1,5 +1,5 @@
-<div id="textEditor">
-    <div id="theRibbon">
+<div id="skv-text-editor">
+    <div id="skv-ribbon" [ngStyle]="options">
         <button title="Bold" (click)="executeCommand('Bold')"><b>B</b></button>
         <button title="Italic" (click)="executeCommand('Italic')"><i>I</i></button>
         <button title="Underline" (click)="executeCommand('Underline')"><u>U</u></button>
@@ -26,7 +26,8 @@
             <input type="file" (change)="insertImage($event.target)" accept="image/*">
         </button>
     </div>
-    <div id="richTextArea">
-        <iframe #iframe id="theWYSIWYG" name="theWYSIWYG" frameborder="0"></iframe>
+    <div id="richTextArea" [ngStyle]="{'border':options.border}">
+        <iframe #iframe id="skv-wysiwyg" name="skv-wysiwyg" frameborder="0"></iframe>
     </div>
+
 </div>
